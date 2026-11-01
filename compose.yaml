@@ -1,0 +1,62 @@
+# The stack the browser tests run against:
+# - app: Webhook Studio from its own compose file, in the default `restricted` replay mode, with PostgreSQL and Redis;
+# - app-local: the same image in `local` replay mode;
+# - echo: a small server for replays to reach;
+# - tests: the runner, with Chromium, Firefox and WebKit.
+# Run it with `docker compose run --rm tests`. docs/guide/running.md has the details.
+name: webhook-studio-e2e
+
+include:
+  - path:
+      - ${APP_DIR:-../reflex-fastapi-webhook-studio}/compose.yaml
+      - docker/app.override.yaml
+
+x-runner: &runner
+  build:
+    context: .
+    dockerfile: docker/runner.Dockerfile
+  image: webhook-studio-e2e-runner:local
+
+services:
+  app-local:
+    image: webhook-studio:local
+    pull_policy: never
+    environment:
+      WEBHOOK_STUDIO_DATABASE_URL: postgresql+psycopg://studio:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD}@postgres:5432/studio
+      WEBHOOK_STUDIO_REPLAY_MODE: local
+      REFLEX_REDIS_URL: redis://redis:6379/1
+      REFLEX_API_URL: http://app-local:17300
+      REFLEX_DEPLOY_URL: http://app-local:17300
+      REFLEX_CORS_ALLOWED_ORIGINS: http://app-local:17300
+    depends_on:
+      app:
+        condition: service_healthy
+
+  echo:
+    <<: *runner
+    command: [ "python", "-m", "webhook_studio_e2e.echo", "--port", "8080" ]
+    healthcheck:
+      test: [ "CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/', timeout=2)" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  tests:
+    <<: *runner
+    # Write reports and screenshots into the mounted repo as the caller, not as root.
+    user: "${E2E_UID:-1000}:${E2E_GID:-1000}"
+    environment:
+      HOME: /tmp
+      E2E_BASE_URL: http://studio:17300
+      E2E_LOCAL_REPLAY_URL: http://app-local:17300
+      E2E_ECHO_URL: http://echo:8080
+    volumes:
+      - .:/work
+    depends_on:
+      app:
+        condition: service_healthy
+      app-local:
+        condition: service_healthy
+      echo:
+        condition: service_healthy
+    command: [ "pytest" ]
