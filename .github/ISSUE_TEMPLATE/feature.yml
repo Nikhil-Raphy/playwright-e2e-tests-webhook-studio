@@ -1,0 +1,21 @@
+name: Feature request
+description: Suggest a scenario to test, or a change to how the tests run.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What should the tests cover or do?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: How would you check it?
+      description: Write it as Given, When, Then if you can.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: What else have you tried?
