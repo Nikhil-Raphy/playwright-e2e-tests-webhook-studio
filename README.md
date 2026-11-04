@@ -14,6 +14,7 @@ Python with pytest, and drive the real app in **Chromium, Firefox and WebKit**.
 | Area           | Examples                                                                                          |
 | -------------- | ------------------------------------------------------------------------------------------------- |
 | Bins           | Make a bin, open one by id or URL, see the bins this browser made, and when they expire.          |
+| Version        | Every page shows the version that the app's API reports.                                          |
 | Requests       | Overview fields; JSON, form, text and binary bodies; query strings; masked secret headers.         |
 | Live updates   | A request shows within a second, in every open tab; renames show at once.                         |
 | Finding        | Method filter, search, Clear filters, and older requests by scrolling or by "Load older".         |
@@ -22,7 +23,7 @@ Python with pytest, and drive the real app in **Chromium, Firefox and WebKit**.
 | Replay         | Refused to private addresses in `restricted` mode; reaches an echo service in `local` mode.       |
 | Clipboard      | Copy URL and Copy as curl (Chromium).                                                            |
 | Accessibility  | Every page, tab and dialog scanned with axe-core for WCAG 2.2 AA; any finding fails.              |
-| Looks          | Screenshots compared with approved ones, per browser, with ids, URLs and times masked.            |
+| Looks          | Screenshots compared with approved ones, per browser, with the version, ids, URLs and times masked. |
 
 ## Playwright features in use
 

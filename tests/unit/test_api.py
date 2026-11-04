@@ -11,6 +11,7 @@ import pytest
 from webhook_studio_e2e.api import StudioApi
 
 BIN_ID = "AbCdEfGhIjKlMnOpQrStUv"
+VERSION = "1.2.0"
 
 
 class FakeApp:  # pylint: disable=too-few-public-methods  # httpx calls it as a function.
@@ -33,6 +34,8 @@ class FakeApp:  # pylint: disable=too-few-public-methods  # httpx calls it as a 
         path = request.url.path
         if request.method == "POST" and path == "/api/v1/bins":
             return httpx.Response(201, json={"id": BIN_ID})
+        if path == "/api/v1/version":
+            return httpx.Response(200, json={"version": VERSION})
         if path == f"/api/v1/bins/{BIN_ID}":
             return httpx.Response(204) if request.method == "DELETE" else httpx.Response(200, json={"id": BIN_ID})
         if path.startswith(f"/api/webhook/{BIN_ID}"):
@@ -59,6 +62,17 @@ def test_given_label_or_none_when_bins_are_made_then_each_post_carries_it_and_th
     # Then
     assert ids == [BIN_ID, BIN_ID]
     assert [json.loads(request.content) for request in app.received] == [{"label": "orders"}, {}]
+
+
+def test_given_app_when_its_version_is_read_then_the_version_route_answers_it(app: FakeApp) -> None:
+    """Given an app, when its version is read, then the client asks the version route and returns its answer."""
+    # Given
+    with StudioApi("http://studio", transport=httpx.MockTransport(app)) as api:
+        # When
+        version = api.version()
+    # Then
+    assert version == VERSION
+    assert (app.received[0].method, app.received[0].url.path) == ("GET", "/api/v1/version")
 
 
 def test_given_bin_when_request_is_sent_then_it_reaches_the_capture_url_as_given(app: FakeApp) -> None:

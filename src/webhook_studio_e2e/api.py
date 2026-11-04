@@ -11,6 +11,7 @@ if TYPE_CHECKING:
 TIMEOUT_S = 10.0
 CAPTURE_PREFIX = "/api/webhook"
 BINS = "/api/v1/bins"
+VERSION = "/api/v1/version"
 
 type Headers = Mapping[str, str] | list[tuple[str, str]]
 
@@ -81,6 +82,14 @@ class StudioApi:
             The full capture URL.
         """
         return f"{self.base_url}{CAPTURE_PREFIX}/{bin_id}{path}"
+
+    def version(self) -> str:
+        """Read the app's version.
+
+        Returns:
+            The version, such as "1.2.0".
+        """
+        return str(self._json(self._client.get(VERSION))["version"])
 
     def create_bin(self, label: str | None = None) -> str:
         """Make a bin.

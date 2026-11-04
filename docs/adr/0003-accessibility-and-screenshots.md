@@ -18,7 +18,8 @@ only in its TypeScript runner.
   open, Radix hides the rest of the page from screen readers but leaves it focusable, which axe flags.
 - **Screenshots:** pytest-playwright-visual-snapshot compares each screenshot with an approved one, kept in
   `snapshots/`, one per browser. Ids, URLs, relative times and the curl command, which change on every run, are
-  masked. Approved screenshots are made only in the runner image.
+  masked, and so is the app's version, which changes with each release. Approved screenshots are made only in the
+  runner image.
 
 ## Consequences
 

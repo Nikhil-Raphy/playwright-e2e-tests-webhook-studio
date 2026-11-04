@@ -87,3 +87,14 @@ def test_given_new_bin_when_home_lists_it_then_it_expires_in_seven_days(home: Ho
     home.goto()
     # Then
     expect(home.row("expiry")).to_contain_text("in 7 days")
+
+
+def test_given_app_version_when_home_and_bin_pages_show_then_each_shows_it(home: HomePage, api: StudioApi) -> None:
+    """Given the version the API reports, when the home page and a bin's page show, then each shows it."""
+    # Given
+    expected = f"v{api.version()}"
+    # When
+    bin_page = home.goto().make_bin("versioned")
+    # Then
+    expect(bin_page.version).to_have_text(expected)
+    expect(home.goto().version).to_have_text(expected)

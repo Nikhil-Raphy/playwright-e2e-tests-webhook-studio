@@ -6,12 +6,13 @@ if TYPE_CHECKING:
     from playwright.sync_api import Locator, Page
 
 SCREENSHOT_MASKS = (
+    '[data-testid="app-version"]',
     '[data-testid="capture-url"]',
     "time",
     '[data-testid="bin-row"] code',
     '[data-testid="empty-state"] pre',
 )
-"""Parts that differ on every run: bin URLs and ids, the curl command that holds them, and relative times."""
+"""Parts that differ between runs or releases: the app version, bin URLs and ids, the curl command and times."""
 
 
 class AppPage:
@@ -27,6 +28,7 @@ class AppPage:
         self.page = page
         self.base_url = base_url
         self.spinner: Locator = page.get_by_test_id("loading")
+        self.version: Locator = page.get_by_test_id("app-version")
 
     def text(self, content: str) -> Locator:
         """Find text the page shows, such as a toast, a notice or a header value.
