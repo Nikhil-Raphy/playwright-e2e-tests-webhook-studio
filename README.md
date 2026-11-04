@@ -65,7 +65,8 @@ src/webhook_studio_e2e/     typed support package
 ├── api.py                  REST client for test data
 ├── accessibility.py        axe-core scan and readable findings
 ├── echo.py                 echo server, the target for replays
-└── settings.py             where the apps are, from E2E_* variables
+├── settings.py             where the apps are, from E2E_* variables
+└── _version.py             the version: the one place to change it
 tests/
 ├── unit/                   tests for the support package, no browser
 └── e2e/                    browser tests, one file per area
