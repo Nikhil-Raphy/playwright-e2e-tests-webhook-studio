@@ -1,0 +1,18 @@
+site_name: Webhook Studio browser tests
+site_description: Playwright end-to-end tests for Reflex FastAPI Webhook Studio, written in Python with pytest.
+site_url: https://nikhil-raphy.github.io/playwright-e2e-tests-webhook-studio/
+repo_url: https://github.com/Nikhil-Raphy/playwright-e2e-tests-webhook-studio
+repo_name: Nikhil-Raphy/playwright-e2e-tests-webhook-studio
+copyright: Copyright 2026 Nikhil-Raphy. Apache-2.0 license.
+
+nav:
+  - Home: index.md
+  - Guides:
+      - guide/running.md
+      - guide/writing.md
+      - guide/reports.md
+  - Decisions:
+      - adr/index.md
+      - adr/0001-page-objects-and-plain-pytest.md
+      - adr/0002-run-against-the-apps-own-compose-file.md
+      - adr/0003-accessibility-and-screenshots.md

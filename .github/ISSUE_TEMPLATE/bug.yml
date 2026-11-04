@@ -1,0 +1,38 @@
+name: Bug report
+description: Tell us about a test that fails, flakes or checks the wrong thing.
+labels: [bug]
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Name the test, and paste its error text. Attach the trace if you have one.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to repeat it
+      placeholder: |
+        1. Run `docker compose run --rm tests pytest tests/e2e/test_home.py --browser webkit`
+        2. See ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Commits of this repo and of the app
+      placeholder: tests at a1b2c3d, app at e4f5a6b
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser
+      placeholder: chromium, firefox or webkit

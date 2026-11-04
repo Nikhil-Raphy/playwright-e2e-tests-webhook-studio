@@ -1,0 +1,13 @@
+{
+    "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+    "release-type": "simple",
+    "bump-minor-pre-major": true,
+    "packages": {
+        ".": {
+            "package-name": "playwright-e2e-tests-webhook-studio",
+            "extra-files": [
+                "src/webhook_studio_e2e/_version.py"
+            ]
+        }
+    }
+}

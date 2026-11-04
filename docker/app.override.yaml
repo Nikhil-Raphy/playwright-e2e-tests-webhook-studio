@@ -1,0 +1,13 @@
+# Changes to the app's own compose file for the test stack: the browser in the runner reaches the app by a network
+# alias, so the app must accept that origin, and nothing is published on the host. The alias is not "app": browsers
+# force HTTPS for that name, because the whole .app top-level domain is on the HSTS preload list.
+services:
+  app:
+    environment:
+      REFLEX_API_URL: http://studio:17300
+      REFLEX_DEPLOY_URL: http://studio:17300
+      REFLEX_CORS_ALLOWED_ORIGINS: http://studio:17300
+    ports: !reset []
+    networks:
+      default:
+        aliases: [ studio ]

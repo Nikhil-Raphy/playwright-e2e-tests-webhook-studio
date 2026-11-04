@@ -1,0 +1,114 @@
+[project]
+name = "playwright-e2e-tests-webhook-studio"
+dynamic = ["version"]
+description = "Playwright end-to-end tests for Reflex FastAPI Webhook Studio, written in Python with pytest."
+readme = "README.md"
+authors = [{ name = "Nikhil Raphy" }]
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+requires-python = ">=3.14"
+dependencies = [
+    "axe-playwright-python>=0.1.8",
+    "httpx>=0.28.1",
+    # Must match the browsers in the Playwright image that docker/runner.Dockerfile builds on.
+    "playwright==1.64.1",
+]
+
+[build-system]
+requires = ["hatchling>=1.33.0,<2"]
+build-backend = "hatchling.build"
+
+# The version lives only in _version.py; uv_build cannot read a version from a file.
+[tool.hatch.version]
+path = "src/webhook_studio_e2e/_version.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/webhook_studio_e2e"]
+
+[tool.uv]
+cache-keys = [{ file = "pyproject.toml" }, { file = "src/webhook_studio_e2e/_version.py" }]
+
+[dependency-groups]
+dev = [
+    "allure-pytest>=2.16.2",
+    "mypy>=2.4.1",
+    "pylint>=4.1.3",
+    "pytest>=9.2.0",
+    "pytest-cov>=7.1.0",
+    "pytest-html>=4.2.0",
+    "pytest-playwright>=0.10.0",
+    "pytest-playwright-visual-snapshot>=0.5.1",
+    "pytest-rerunfailures>=16.7",
+    "ruff>=0.17.3",
+]
+docs = [
+    "zensical>=0.0.74",
+]
+
+[tool.ruff]
+line-length = 120
+target-version = "py314"
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = ["D203", "D213", "COM812", "ISC001", "CPY"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.isort]
+known-first-party = ["webhook_studio_e2e"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101", "PLR2004"]
+
+[tool.ruff.format]
+docstring-code-format = true
+
+[tool.pylint.main]
+py-version = "3.14"
+
+[tool.pylint."messages control"]
+disable = [
+    "too-many-instance-attributes", # A page object holds one locator per part of its page.
+]
+
+[tool.pylint.format]
+max-line-length = 120
+
+[tool.pylint.similarities]
+min-similarity-lines = 8
+
+[tool.mypy]
+python_version = "3.14"
+strict = true
+mypy_path = "src"
+
+# The axe wrapper and the screenshot plugin ship no py.typed marker; read their real types instead of Any.
+[[tool.mypy.overrides]]
+module = ["axe_playwright_python.*", "pytest_playwright_visual_snapshot.*"]
+follow_untyped_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = [
+    "-ra",
+    "--strict-markers",
+    "--strict-config",
+    "--tracing=retain-on-failure",
+    "--video=retain-on-failure",
+    "--screenshot=only-on-failure",
+    "--output=test-results",
+]
+# Approved screenshots live in the repo; a failed compare writes actual, expected and diff images here.
+playwright_visual_snapshots_path = "snapshots"
+playwright_visual_snapshot_failures_path = "test-results/snapshot-failures"
+
+[tool.coverage.run]
+branch = true
+source = ["webhook_studio_e2e"]
+
+[tool.coverage.report]
+fail_under = 90
+show_missing = true
+exclude_also = ['if __name__ == "__main__":']

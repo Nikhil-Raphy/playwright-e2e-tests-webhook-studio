@@ -218,3 +218,15 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Test runs: Playwright traces, videos and screenshot diffs, reports, Allure results and history
+test-results/
+reports/
+allure-results/
+allure-report/
+history.jsonl
+# The app, checked out here by CI
+/app/
+# Editor settings stay on each machine
+.vscode/
+.idea/
