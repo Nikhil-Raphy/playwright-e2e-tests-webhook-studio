@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 # The test runner: Playwright's image, which holds Chromium, Firefox and WebKit with their system libraries, plus uv,
 # Python 3.14 and this project's packages. The echo service runs from it too.
-FROM mcr.microsoft.com/playwright/python:v1.64.1-noble@sha256:330d401ae23c905896a0c26c66c36fc971b621519e7b11b435a8328d7bf6e031
+FROM mcr.microsoft.com/playwright/python:v1.65.2-noble@sha256:38dd67fc654b56b3cba611e4c8eb71cd33750e1cd29eea2a5dc00b484817a75f
 
 COPY --from=ghcr.io/astral-sh/uv:0.12.24@sha256:3af4716e991d6956a41e573eab705d0ee08500cd829ed30293eb8472f372c65a /uv /usr/local/bin/uv
 # Keep the venv and Python outside /work, which compose mounts over with the repo.
